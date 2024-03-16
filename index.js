@@ -18,8 +18,9 @@ const possibleFreelancers = [
   ];
 
   let interval
-//create constant to select body
+//create refferences
 const main = document.querySelector("main");
+const average = document.querySelector("#average")
 
 //apend a title to the body
 const title = document.createElement("h1");
@@ -83,15 +84,14 @@ availableFreelancers.forEach((item) => render(item));
 function priceAverage(){
    const priceSum = availableFreelancers.reduce((acc, number) => acc + number.price, 0);
    const averagePrice = priceSum / availableFreelancers.length;
-   return averagePrice;
+   return Math.floor(averagePrice);
 }
 //render priceaverage function
 const averageDiv = document.createElement("div");
 const averageline = document.createElement("p");
-const averageText = document.createTextNode(`The average price is:`+ " " + priceAverage());
-averageline.appendChild(averageText);
+averageline.textContent = (`The average price is:`+ " " + "$" + priceAverage());
 averageDiv.appendChild(averageline);
-main.appendChild(averageDiv)
+average.appendChild(averageDiv);
 
 //create a function that adds new freelancers to the list every few seconds
 function addRandomFreelancer(){
@@ -110,9 +110,17 @@ function addRandomFreelancer(){
 
     //push freelancer object into available freelancer list
     availableFreelancers.push(freelancer);
-    
-    console.log()
 
+    //stop the interval when the possible freelancers array is empty
+    if(availableFreelancers.length >= 10){
+        clearInterval(interval)
+    }
+
+    render(freelancer);
+
+    averageline.textContent = (`The average price is:`+ " " + "$" + priceAverage());
+    averageDiv.appendChild(averageline);
+    average.appendChild(averageDiv);
 }
 
 //create an interval to add random objects to availableFreelancers
